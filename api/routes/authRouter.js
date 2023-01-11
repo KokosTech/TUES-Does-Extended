@@ -14,6 +14,14 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts, please try again later",
 });
 
+const signupLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000, // 15 minutes
+  max: 3, // limit each IP to 5 login attempts per windowMs
+  message: "Too many signup attempts, please try again later",
+});
+
+// login
+
 router
   .route("/login")
   .all(loginLimiter)
@@ -60,7 +68,9 @@ router
     }
   });
 
-router.post("/signup", validateForm, async (req, res) => {
+// sign up
+
+router.using(signupLimiter).post("/signup", validateForm, async (req, res) => {
   console.log(req.body.username);
 
   const existingUser = await pool.query(
