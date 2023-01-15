@@ -54,7 +54,7 @@ router
       );
 
       if (isSamePass) {
-        //const token = jwt.sign({ id: potentialLogin.rows[0].id }, process.env.JWT_SECRET);
+        //const token = jwt.sign({ id: potentialLogin.rows[0].id }, process.env.JWT_SECRET); - for jwt - in the future
 
         req.session.user = {
           id: potentialLogin.rows[0].id,
@@ -70,7 +70,7 @@ router
 
 // sign up
 
-router.using(signupLimiter).post("/signup", validateForm, async (req, res) => {
+router.all(loginLimiter).post("/signup", validateForm, async (req, res) => {
   console.log(req.body.username);
 
   const existingUser = await pool.query(
