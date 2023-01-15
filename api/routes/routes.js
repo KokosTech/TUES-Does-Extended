@@ -37,7 +37,7 @@ router
         res.status(500).json({ error: err.message });
       });
   })
-  .post(checkAuth, async(req, res) => {
+  .post(checkAuth, async (req, res) => {
     const user = req.params.user;
     if (!user) {
       res.status(400).json({ message: "No user specified" });
@@ -51,8 +51,38 @@ router
     }
 
     // use it with nested queries OR use transaction - implement on friday
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const userId = await client.query(
+        `SELECT id FROM users WHERE username = $1`,
+        [user]
+      );
 
-    pool
+      const listId = await client.query(
+        `INSERT INTO lists
+            (name, icon, color, owner_id)
+        VALUES
+            ($1, $2, $3, $4)
+        returning id;`,
+        [
+          list.name,
+          list.icon || "default",
+          list.color || "blue",
+          userId.rows[0].id,
+        ]
+      );
+      await client.query("COMMIT");
+
+      res.json({ message: "List created", id: listId.rows[0].id });
+    } catch (err) {
+      await client.query("ROLLBACK");
+      res.status(500).json({ error: err.message });
+    } finally {
+      client.release();
+    }
+
+    /*     pool
       .query(
         `INSERT INTO lists 
             (name, icon, color, owner_id) 
@@ -66,7 +96,7 @@ router
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
-      });
+      }); */
   })
   .put(checkAuth, (req, res) => {
     const user = req.params.user;
