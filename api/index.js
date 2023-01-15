@@ -43,9 +43,7 @@ app.use(session({
 
 app.enable('trust proxy');
 
-
 app.use('/auth', authRouter);
-
 app.use('/', routes);
 
 const PORT = 5002;
