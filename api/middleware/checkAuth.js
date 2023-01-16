@@ -10,7 +10,8 @@ module.exports = (req, res, next) => {
         const { userId } = decodedToken; */
         //console.log(userId);
         //if(req.params.id === userId) 
-        next();
+
+        req.session.user && req.session.user.username ? next() : res.status(401).json({ message: "You must be logged in to access this route" });
     } catch (err) {
         res.status(401).json({ 
             message: "You must be logged in to access this route" 
