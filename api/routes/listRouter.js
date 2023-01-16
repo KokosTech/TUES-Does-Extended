@@ -16,11 +16,11 @@ router
       return;
     }
 
-    if(user !== req.session.user.username) {
+/*     if(user !== req.session.user.username) {
         console.log("Unauthorized -> ", user, req.session.user.username);
         res.status(401).json({ message: "Unauthorized" });
         return;
-    }
+    } */
 
     pool
       .query(
@@ -179,7 +179,7 @@ router
         `SELECT
             lists.id, 
             lists.name,
-            user.username,
+            users.username,
             lists.icon,
             lists.color,
         FROM lists

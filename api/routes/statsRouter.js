@@ -4,7 +4,7 @@ const checkAuth = require("../middleware/checkAuth");
 
 const pool = require("../db");
 
-router.route("/:lid")
+router.route("progress/:lid")
 .get(checkAuth, async (req, res) => {
   const { lid } = req.params;
   //const { uid } = req.session.user;
@@ -41,5 +41,24 @@ router.route("/:lid")
     client.release();
   }
 });
+
+router.route("/total/:lid")
+.get(checkAuth, async (req, res) => {
+  const { lid } = req.params;
+  //const { uid } = req.session.user;
+
+  pool.query(
+    `SELECT COUNT(*) FROM tasks WHERE list_id = $1`,
+  )
+  .then((total) => {
+    console.log("[/stats/total/:lid ("+ lid +")", total.rows);
+    res.json(total.rows);
+  })
+  .catch((err) => {
+    console.error("[/stats/total/:lid ("+ lid +")", err.message);
+    res.status(500).json({ error: err.message });
+  });
+});
+
 
 module.exports = router;

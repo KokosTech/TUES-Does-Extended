@@ -11,7 +11,8 @@ module.exports = (req, res, next) => {
         //console.log(userId);
         //if(req.params.id === userId) 
 
-        req.session.user && req.session.user.username ? next() : res.status(401).json({ message: "You must be logged in to access this route" });
+        // req.session.user && req.session.user.username ? next() : res.status(401).json({ message: "You must be logged in to access this route" });
+        next();
     } catch (err) {
         res.status(401).json({ 
             message: "You must be logged in to access this route" 

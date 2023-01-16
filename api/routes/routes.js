@@ -10,6 +10,6 @@ const router = express.Router();
 router.use('/auth', require('./authRouter'));
 router.use("/lists", require("./listRouter"));
 router.use("/tasks", require("./taskRouter"));
-router.use("/progress", require("./statsRouter"));
+router.use("/stats", require("./statsRouter"));
 
 module.exports = router;
