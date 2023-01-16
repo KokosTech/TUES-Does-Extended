@@ -26,7 +26,7 @@ const Navigation = ({ isLoggedIn, current, setCurrent }) => {
     ]; */
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_SERVER_URL}/lists/${user.username}`, {
+        fetch(`${process.env.REACT_APP_SERVER_URL}/lists/user/${user.username}`, {
             method: "GET",
             credentials: "include",
             headers: {

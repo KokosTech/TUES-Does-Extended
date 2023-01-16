@@ -22,6 +22,7 @@ const UserContext = ({ children }) => {
     //${process.env.REACT_APP_SERVER_URL}
     fetch(`${process.env.REACT_APP_SERVER_URL}/auth/login`, {
       credentials: "include",
+      mode: 'cors',
       headers: {
         authorization: `Bearer ${user.token}`,
       },
