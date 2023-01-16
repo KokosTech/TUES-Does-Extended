@@ -24,7 +24,6 @@ const signupLimiter = rateLimit({
 
 router
   .route("/login")
-  .all(loginLimiter)
   .get(async (req, res) => {
     if (req.session.user && req.session.user.username) {
       res.json({ loggedIn: true, username: req.session.user.username });
@@ -32,7 +31,7 @@ router
       res.json({ loggedIn: false });
     }
   })
-  .post(validateForm, async (req, res) => {
+  .post(loginLimiter, validateForm, async (req, res) => {
     const potentialLogin = await pool.query(
       `SELECT 
                 id, 

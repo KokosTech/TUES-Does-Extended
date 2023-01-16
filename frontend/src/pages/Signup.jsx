@@ -44,7 +44,7 @@ const SignUp = () => {
                     setError(data.status);
                 } else if (data.loggedIn) {
                     setUser({ ...data });
-                    fetch(process.env.REACT_APP_SERVER_URL + "/lists/" + user.username, {
+                    fetch(process.env.REACT_APP_SERVER_URL + "/lists/user/" + user.username, {
                         method: "POST",
                         credentials: "include",
                         headers: {

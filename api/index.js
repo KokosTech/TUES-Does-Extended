@@ -5,9 +5,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const session = require('express-session'); 
-const authRouter = require('./routes/authRouter');
 const routes = require('./routes/routes');
 const pool = require('./db');
+const morgan = require('morgan');
+
 
 require('dotenv').config();
 
@@ -20,7 +21,6 @@ app.use(
   })
 );
 
-const morgan = require('morgan');
 app.use(morgan('combined'))
 
 app.use(express.json());
@@ -43,7 +43,17 @@ app.use(session({
 
 app.enable('trust proxy');
 
-app.use('/auth', authRouter);
+// test initial db connection
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  } else {
+    console.log('Connected to database');
+  }
+});
+
+// routes
 app.use('/', routes);
 
 const PORT = 5002;

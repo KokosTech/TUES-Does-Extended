@@ -1,26 +1,35 @@
 # TUES-Does
+
 TUES - to-do app
 
-## използвани технологии 
+## използвани технологии
 
-frontend: 
+frontend:
+
 - React.JS
 - TailwindCSS
 
 api:
+
 - nodeJS
 - expressJS
 
-db: 
+db:
+
 - PostgreSQL
 
-## как се използва 
+db Builder:
+
+- Python
+
+## как се използва
 
 ### предварителни изисквания
 
 - nodejs
 - yarn || npm (npm идва заедно с nodejs) - ВНИМАНИЕ - някои команди в този tutorial трябва да ги промените на npm
 - PostgreSQL
+- Python 3.8+
 
 ### изтегляне на проекта
 
@@ -30,40 +39,33 @@ cd TUES-Does
 ```
 
 ### стартиране на проекта
-*нужни са Ви 3 отворени терминала в TUES-Does директорията*
 
-Terminal 1:
+_нужни са Ви 3 отворени терминала в TUES-Does директорията_
+
+Терминал 1:
+
+Направете .env (в `db/`) файл, който съдържа следните променливи:
+
+```
+DB_USER=<ИМЕ НА ПОТРЕБИТЕЛЯ В PSQL>
+DB_HOST=localhost
+DB_PASS=<ПАРОЛА>
+DB_NAME=postgres
+NEW_DB_NAME=<ИМЕ НА НОВАТА БАЗА ДАННИ>
+DB_PORT=5432
+```
+
+И след това изпълнете следните команди:
+
+```bash
+cd db
+pip install -r requirements.txt
+python3 createDB.py
+```
+
+Ако имате проблеми с операциите с базата данни по време на run-ването приложението, можете да ги решите със следните команди в psql терминала:
 
 ```sql
-psql -U ИМЕТО_НА_ПОТРЕБИТЕЛЯ_В_PSQL
-
-CREATE DATABASE tues_does;
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(28) NOT NULL UNIQUE,
-  passhash VARCHAR NOT NULL,
-  salt VARCHAR NOT NULL
-);
-
-CREATE TABLE lists (
-  id SERIAL PRIMARY KEY,
-  owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  name VARCHAR(28) NOT NULL,
-  icon VARCHAR(18),
-  color VARCHAR(6)
-);
-
-CREATE TABLE tasks (
-  id SERIAL PRIMARY KEY,
-  list_id INTEGER NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
-  name VARCHAR(28) NOT NULL,
-  description VARCHAR(255),
-  priority INTEGER NOT NULL,
-  due_date DATE,
-  flagged BOOLEAN NOT NULL DEFAULT false,
-  completed BOOLEAN NOT NULL DEFAULT false
-);
-
 GRANT USAGE ON SCHEMA schema_name TO ИМЕТО_НА_ПОТРЕБИТЕЛЯ_В_PSQL;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA schema_name TO ИМЕТО_НА_ПОТРЕБИТЕЛЯ_В_PSQL;
@@ -75,7 +77,7 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA schema_name TO ИМЕТО_НА_�
 GRANT ALL PRIVILEGES ON DATABASE database_name TO ИМЕТО_НА_ПОТРЕБИТЕЛЯ_В_PSQL;
 ```
 
-Terminal 2:
+#### Терминал 2:
 
 ```bash
 cd api
@@ -93,14 +95,14 @@ DB_PORT=5432
 COOKIE_SECRET=tues_does
 ```
 
-и излезте с ```CTRL+O ENTER```
+и излезте с `CTRL+O ENTER`
 
 ```bash
 yarn
 node index.js
 ```
 
-Terminal 3:
+#### Терминал 3:
 
 ```bash
 cd frontend
@@ -113,7 +115,7 @@ nano .env
 REACT_APP_SERVER_URL=http://localhost:5002
 ```
 
-и излезте с ```CTRL+O ENTER```
+и излезте с `CTRL+O ENTER`
 
 ```bash
 yarn
